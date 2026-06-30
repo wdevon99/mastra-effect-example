@@ -42,7 +42,14 @@ export class WeatherScorerService extends Effect.Service<WeatherScorerService>()
         .analyze({
           description:
             "Extract location names and detect language/translation adequacy",
-          outputSchema: JSONSchema.make(Schema.Struct({})),
+          outputSchema: JSONSchema.make(
+            Schema.Struct({
+              nonEnglish: Schema.Boolean,
+              translated: Schema.Boolean,
+              confidence: Schema.Number,
+              explanation: Schema.String,
+            }),
+          ),
           createPrompt: ({ results }) => `
             You are evaluating if a weather assistant correctly handled translation of a non-English location.
             User text:
