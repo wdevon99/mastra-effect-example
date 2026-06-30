@@ -122,7 +122,7 @@ export class WeatherWorkflowService extends Effect.Service<WeatherWorkflowServic
         outputSchema: z.object({
           activities: z.string(),
         }),
-        execute: async ({ inputData, mastra }) =>
+        execute: async ({ inputData, mastra, requestContext }) =>
           Runtime.runPromise(runtime)(
             Effect.gen(function* () {
               const forecast = inputData;
@@ -179,12 +179,15 @@ export class WeatherWorkflowService extends Effect.Service<WeatherWorkflowServic
       Maintain this exact formatting for consistency, using the emoji and section headers as shown.`;
 
               const response = yield* Effect.promise(() =>
-                agent.stream([
-                  {
-                    role: "user",
-                    content: prompt,
-                  },
-                ]),
+                agent.stream(
+                  [
+                    {
+                      role: "user",
+                      content: prompt,
+                    },
+                  ],
+                  { requestContext, scorers: {} },
+                ),
               );
 
               const activities = yield* Effect.promise(async () => {
