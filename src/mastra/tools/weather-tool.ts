@@ -66,7 +66,7 @@ export class WeatherToolService extends Effect.Service<WeatherToolService>()(
         description: "Get current weather for a location",
         inputSchema: JSONSchema.make(
           Schema.Struct({
-            test: Schema.String,
+            location: Schema.String,
           }),
         ),
         outputSchema: z.object({
